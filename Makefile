@@ -50,7 +50,7 @@ clean:
 
 svnclean: clean
 
-mantxt: 
+mantxt:
 	nroff -c -man mp3check.1 | sed 's/.'$(shell echo -e '\010')'//g' > mp3check-man.txt
 
 
@@ -59,8 +59,8 @@ mantxt:
 # --- meta object compiler for qt -------------------------------------------
 moc_%.cc: %.h
 	moc -o $@ $<
-	
-	
+
+
 # --- dependency generation -------------------------------------------------
 .dep.%: %.cc
 	$(CXX) $(CPPFLAGS) -MM -MT "$@ $(<:%.cc=%.o)" $< -o $@
@@ -70,4 +70,3 @@ ifeq ($(findstring $(MAKECMDGOALS),svnclean),)
 -include $(DEP)
 endif
 endif
-		
