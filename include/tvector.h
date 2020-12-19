@@ -22,16 +22,14 @@
 #ifndef _ngw_tvector_h_
 #define _ngw_tvector_h_
 
-
 #ifdef DONT_USE_STL
 #include "ttvector.h"
 #define tvector_base ttvector
 #else
-# include <vector>
-# define tvector_base vector
+#include <vector>
+#define tvector_base vector
 using namespace std;
 #endif
-
 
 #include "texception.h"
 
@@ -43,46 +41,48 @@ using namespace std;
 // 16 Sep: splittet tstl.h into tvector.h and tmap.h
 // 20 Sep: clear() added
 
-template<class T>
-class tvector: public tvector_base<T> {
+template <class T> class tvector : public tvector_base<T> {
 public:
-    // 1:1 wrapper
+  // 1:1 wrapper
 
-    /// create an empty vector
-    tvector():tvector_base<T>() {}
-    /// create a vector with n elements
-    tvector(size_t n):tvector_base<T>(n) {}
-    /// create a vector with n copies of t
-    tvector(size_t n, const T& t):tvector_base<T>(n, t) {}
+  /// create an empty vector
+  tvector() : tvector_base<T>() {}
+  /// create a vector with n elements
+  tvector(size_t n) : tvector_base<T>(n) {}
+  /// create a vector with n copies of t
+  tvector(size_t n, const T &t) : tvector_base<T>(n, t) {}
 
-    // new functionality
+  // new functionality
 
-    /// append an element to the end
-    const tvector& operator += (const T& a) {
-        this->push_back(a);
-        return *this;
-    }
-    /// append another tvector to the end
-    const tvector& operator += (const tvector& a) {
-        this->insert(tvector_base<T>::end(), a.tvector_base<T>::begin(), a.tvector_base<T>::end());
-        return *this;
-    }
-    /// direct read only access, safe
-    const T& operator[](size_t i) const {
-        if(i < tvector_base<T>::size()) return tvector_base<T>::operator[](i);    // throw(TZeroBasedIndexOutOfRangeException);
-        else throw TZeroBasedIndexOutOfRangeException(i, tvector_base<T>::size());
-    }
-    /// direct read/write access, automatically create new elements
-    T& operator[](size_t i) {
-        if(i >= tvector_base<T>::size()) operator+=(tvector(i - tvector_base<T>::size() + 1));
-        return tvector_base<T>::operator[](i);
-    }
-    /// clear vector
-    void clear() {
-        this->erase(tvector_base<T>::begin(), tvector_base<T>::end());
-    }
+  /// append an element to the end
+  const tvector &operator+=(const T &a) {
+    this->push_back(a);
+    return *this;
+  }
+  /// append another tvector to the end
+  const tvector &operator+=(const tvector &a) {
+    this->insert(tvector_base<T>::end(), a.tvector_base<T>::begin(),
+                 a.tvector_base<T>::end());
+    return *this;
+  }
+  /// direct read only access, safe
+  const T &operator[](size_t i) const {
+    if (i < tvector_base<T>::size())
+      return tvector_base<T>::operator[](
+          i); // throw(TZeroBasedIndexOutOfRangeException);
+    else
+      throw TZeroBasedIndexOutOfRangeException(i, tvector_base<T>::size());
+  }
+  /// direct read/write access, automatically create new elements
+  T &operator[](size_t i) {
+    if (i >= tvector_base<T>::size())
+      operator+=(tvector(i - tvector_base<T>::size() + 1));
+    return tvector_base<T>::operator[](i);
+  }
+  /// clear vector
+  void clear() {
+    this->erase(tvector_base<T>::begin(), tvector_base<T>::end());
+  }
 };
 
-
 #endif /* _ngw_tvector_h_ */
-

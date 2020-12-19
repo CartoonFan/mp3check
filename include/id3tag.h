@@ -20,7 +20,6 @@
  *
  * *GPL*END*/
 
-
 /*COMMENTS
  *
  * Reference docs are :
@@ -48,56 +47,53 @@
 #ifndef _id3tag_h_
 #define _id3tag_h_
 
-class Tagv1
-{
+class Tagv1 {
 
 public:
+  // Default constructor.
+  Tagv1();
 
-    // Default constructor.
-    Tagv1();
+  // Constructor from pointer. Note that it is really only a pointer, the
+  // data is not duplicated. This is probably not the safest way, but the
+  // fastest.
+  Tagv1(const unsigned char *p);
 
-    // Constructor from pointer. Note that it is really only a pointer, the
-    // data is not duplicated. This is probably not the safest way, but the
-    // fastest.
-    Tagv1(const unsigned char *p);
+  // Destructor, doing nothing.
+  ~Tagv1();
 
-    // Destructor, doing nothing.
-    ~Tagv1();
+  // Methods.
+  short unsigned int version() const;
+  bool isValid() const;
+  bool isValidSpecs() const;
+  bool isValidGuess() const;
+  void setTarget(const unsigned char *p);
+  bool store();
+  bool restore(unsigned char *p);
+  void fillFields();
 
-    // Methods.
-    short unsigned int version() const;
-    bool isValid() const;
-    bool isValidSpecs() const;
-    bool isValidGuess() const;
-    void setTarget(const unsigned char *p);
-    bool store();
-    bool restore(unsigned char *p);
-    void fillFields();
+  // Static functions.
+  static bool valid_tag_field_strict(const unsigned char *p, const int len);
+  static bool valid_tag_field_loose(const unsigned char *p, const int len);
+  static int find_next_tag(const unsigned char *p, int len);
+  static void copyStringField(char *dest, const unsigned char *src, int len);
+  unsigned short int fields_version;
+  bool fields_spacefilled;
+  char field_title[31];
+  char field_artist[31];
+  char field_album[31];
+  char field_year[5];
+  char field_comment[31];
+  unsigned char field_genre;
+  unsigned char field_track;
 
-    // Static functions.
-    static bool valid_tag_field_strict(const unsigned char *p, const int len);
-    static bool valid_tag_field_loose(const unsigned char *p, const int len);
-    static int find_next_tag(const unsigned char *p, int len);
-    static void copyStringField(char *dest, const unsigned char *src, int len);
-    unsigned short int fields_version;
-    bool fields_spacefilled;
-    char field_title[31];
-    char field_artist[31];
-    char field_album[31];
-    char field_year[5];
-    char field_comment[31];
-    unsigned char field_genre;
-    unsigned char field_track;
-
-    static const char * const id3_genres[];
-    static const int genres_count;
+  static const char *const id3_genres[];
+  static const int genres_count;
 
 private:
+  static bool spacefilled_tag_field(const char *p, const unsigned int len);
 
-    static bool spacefilled_tag_field(const char *p, const unsigned int len);
-
-    unsigned char *target;
-    bool al; // wether memory is allocated or not
+  unsigned char *target;
+  bool al; // wether memory is allocated or not
 };
 
 #endif

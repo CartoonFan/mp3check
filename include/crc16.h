@@ -20,7 +20,6 @@
  *
  * *GPL*END*/
 
-
 // 1998:
 // 21 Jan  started
 // 22 Jan  first usable version: modified and tested for use with audio mpeg
@@ -34,38 +33,29 @@
 // 26 Feb 00:00 Khali added file crc16.cc for better code structure
 // 26 Feb 00:00 reset(), add() and crc() made inline again for speed reasons
 
-
 class CRC16 {
 public:
-    enum {
-        // CRC-16 polynom: x^16 + x^15 + x^2 + x^0
-        CRC_16 = 0x18005, // works for audio mpeg
-        // CCITT  polynom: x^16 + x^12 + x^5 + x^0
-        CCITT  = 0x11021  // (untested)
-    };
+  enum {
+    // CRC-16 polynom: x^16 + x^15 + x^2 + x^0
+    CRC_16 = 0x18005, // works for audio mpeg
+    // CCITT  polynom: x^16 + x^12 + x^5 + x^0
+    CCITT = 0x11021 // (untested)
+  };
 
-    // create crc engine and reset to 0 (build shift table)
-    CRC16(unsigned int polynom);
+  // create crc engine and reset to 0 (build shift table)
+  CRC16(unsigned int polynom);
 
-    // reset engine to init
-    void reset(unsigned short init = 0) {
-        c = init;
-    }
+  // reset engine to init
+  void reset(unsigned short init = 0) { c = init; }
 
-    // add 8 bits
-    void add(unsigned char b) {
-        c = tab[(c>>8)^b] ^ (c<<8);
-    }
+  // add 8 bits
+  void add(unsigned char b) { c = tab[(c >> 8) ^ b] ^ (c << 8); }
 
-    // get current crc value
-    unsigned short crc() const {
-        return c;
-    }
+  // get current crc value
+  unsigned short crc() const { return c; }
 
 private:
-    // private data
-    unsigned short tab[256];  // shift table
-    unsigned short c;         // current crc value
+  // private data
+  unsigned short tab[256]; // shift table
+  unsigned short c;        // current crc value
 };
-
-
